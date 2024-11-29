@@ -2,17 +2,17 @@
 (let ((ctrlc (format nil "~A" (convert 3 <character>))))
   (block main
     (while t
-      (case (expect* 'timeout 10 "xxx" "yyy")
-        ((0)
+      (expect
+        ("xxx"
          (send ctrlc)
          (sendln "exit")
          (return-from main nil)
          )
-        ((1)
+        (("yyy" "zzz")
          (send ctrlc)
          (sendln "rem")
          )
-        ((-1)
+        (10 ; timeout second
          (send ctrlc)
          (sendln "exit")
          (return-from main nil)

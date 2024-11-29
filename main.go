@@ -31,7 +31,8 @@ func mains(args []string) error {
 			gmnlisp.NewSymbol("send"):    gmnlisp.Function1(g.send),
 			gmnlisp.NewSymbol("sendln"):  gmnlisp.Function1(g.sendln),
 			gmnlisp.NewSymbol("spawn"):   &gmnlisp.Function{Min: 1, F: g.spawn},
-			gmnlisp.NewSymbol("expect*"): gmnlisp.SpecialF(g.expect),
+			gmnlisp.NewSymbol("expect*"): gmnlisp.SpecialF(g.expectX),
+			gmnlisp.NewSymbol("expect"):  gmnlisp.SpecialF(g.expect),
 		})
 
 	if len(args) <= 0 {
