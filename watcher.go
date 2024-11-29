@@ -40,8 +40,6 @@ func (W *Watcher) updateLastLine() {
 	newLinePos := strings.LastIndexByte(W.lastline, '\n')
 	if newLinePos >= 0 {
 		W.lastline = W.lastline[newLinePos+1:]
-	} else {
-		W.lastline = ""
 	}
 }
 
