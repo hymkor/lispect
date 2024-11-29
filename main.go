@@ -12,6 +12,19 @@ import (
 	"github.com/hymkor/go-windows1x-virtualterminal"
 )
 
+func loop(ptmx pty.Pty) error {
+	watcher := NewWatcher(ptmx)
+
+	sh := ptmx.Command("cmd.exe")
+	if err := sh.Start(); err != nil {
+		return err
+	}
+
+	_ = watcher.Expect("100")
+	io.WriteString(ptmx, "exit\r")
+	return sh.Wait()
+}
+
 func mains() error {
 	disableStdout, err := virtualterminal.EnableStdout()
 	if err != nil {
@@ -43,16 +56,7 @@ func mains() error {
 	}
 	defer term.Restore(int(os.Stdin.Fd()), oldState)
 
-	go io.Copy(ptmx, os.Stdin)
-	go io.Copy(os.Stdout, ptmx)
-
-	// sh := ptmx.Command(fields[0], fields[1:]...)
-	// if err := sh.Start(); err != nil {
-	//	return err
-	// }
-	// return sh.Wait()
-
-	return nil
+	return loop(ptmx)
 }
 
 func main() {
