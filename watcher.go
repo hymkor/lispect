@@ -35,21 +35,20 @@ func NewWatcher(pty io.ReadWriter) *Watcher {
 }
 
 func (W *Watcher) updateLastLine() {
-	newLinePos := strings.LastIndexByte(W.lastline, '\n')
-	if newLinePos >= 0 {
-		W.lastline = W.lastline[newLinePos+1:]
-	}
 }
 
 func (W *Watcher) checkWords(token string, words []string) int {
 	W.lastline += token
 	for i, word := range words {
-		if strings.Contains(W.lastline, word) {
-			W.updateLastLine()
+		if pos := strings.Index(W.lastline, word); pos >= 0 {
+			W.lastline = W.lastline[pos+len(word):]
 			return i
 		}
 	}
-	W.updateLastLine()
+	newLinePos := strings.LastIndexByte(W.lastline, '\n')
+	if newLinePos >= 0 {
+		W.lastline = W.lastline[newLinePos+1:]
+	}
 	return -1
 
 }
