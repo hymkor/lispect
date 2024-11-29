@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"time"
 
 	"golang.org/x/term"
 
@@ -20,8 +21,10 @@ func loop(ptmx pty.Pty) error {
 		return err
 	}
 
-	_ = watcher.Expect("100")
+	i := watcher.ExpectWithTimeout(time.Duration(10*time.Second), "100")
+	// i := watcher.Expect("100")
 	io.WriteString(ptmx, "exit\r")
+	println(i)
 	return sh.Wait()
 }
 

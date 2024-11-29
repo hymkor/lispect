@@ -4,6 +4,7 @@ import (
 	"io"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/aymanbagabas/go-pty"
 )
@@ -44,16 +45,40 @@ func (W *Watcher) updateLastLine() {
 	}
 }
 
-func (W *Watcher) Expect(words ...string) int {
-	for frag := range W.ch {
-		W.lastline += frag
-		for i, word := range words {
-			if strings.Contains(W.lastline, word) {
-				W.updateLastLine()
-				return i
-			}
+func (W *Watcher) checkWords(token string, words []string) int {
+	W.lastline += token
+	for i, word := range words {
+		if strings.Contains(W.lastline, word) {
+			W.updateLastLine()
+			return i
 		}
-		W.updateLastLine()
+	}
+	W.updateLastLine()
+	return -1
+
+}
+
+func (W *Watcher) Expect(words ...string) int {
+	for token := range W.ch {
+		if found := W.checkWords(token, words); found >= 0 {
+			return found
+		}
 	}
 	return -1
+}
+
+func (W *Watcher) ExpectWithTimeout(d time.Duration, words ...string) int {
+	timer := time.NewTimer(d)
+	defer timer.Stop()
+
+	for {
+		select {
+		case token := <-W.ch:
+			if found := W.checkWords(token, words); found >= 0 {
+				return found
+			}
+		case <-timer.C:
+			return -1
+		}
+	}
 }
