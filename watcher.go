@@ -5,8 +5,6 @@ import (
 	"os"
 	"strings"
 	"time"
-
-	"github.com/aymanbagabas/go-pty"
 )
 
 type Watcher struct {
@@ -14,19 +12,19 @@ type Watcher struct {
 	lastline string
 }
 
-func NewWatcher(ptmx pty.Pty) *Watcher {
+func NewWatcher(pty io.ReadWriter) *Watcher {
 	pipeline := make(chan string, 1024)
-	go io.Copy(ptmx, os.Stdin)
+	go io.Copy(pty, os.Stdin)
 	go func() {
 		for {
 			var buffer [1024]byte
-			n, err := ptmx.Read(buffer[:])
+			n, err := pty.Read(buffer[:])
 			if err != nil {
 				close(pipeline)
 				return
 			}
 			// If the code below spends a lot of time,
-			// It hangs up to io.Copy(ptmx, os.Stdin)
+			// It hangs up to io.Copy(pty, os.Stdin)
 			// The reason is unknown.
 			os.Stdout.Write(buffer[:n])
 			pipeline <- string(buffer[:n])
