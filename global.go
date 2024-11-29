@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"io"
+	"time"
 
 	"github.com/hymkor/gmnlisp"
 )
@@ -41,11 +42,39 @@ func (g *Global) spawn(ctx context.Context, w *gmnlisp.World, args []gmnlisp.Nod
 	return gmnlisp.Null, nil
 }
 
-func (g *Global) expect(ctx context.Context, w *gmnlisp.World, args []gmnlisp.Node) (gmnlisp.Node, error) {
-	patterns := make([]string, 0, len(args))
-	for _, arg := range args {
-		patterns = append(patterns, arg.String())
+var symTimeout = gmnlisp.NewSymbol("timeout")
+
+func (g *Global) expect(ctx context.Context, w *gmnlisp.World, node gmnlisp.Node) (gmnlisp.Node, error) {
+	patterns := []string{}
+	timeOut := 0
+
+	for gmnlisp.IsSome(node) {
+		var value gmnlisp.Node
+		var err error
+
+		value, node, err = w.ShiftAndEvalCar(ctx, node)
+		if err != nil {
+			return nil, err
+		}
+		if symTimeout.Equals(value, gmnlisp.EQUALP) {
+			value, node, err = w.ShiftAndEvalCar(ctx, node)
+			if err != nil {
+				return nil, err
+			}
+			_timeout, err := gmnlisp.ExpectClass[gmnlisp.Integer](ctx, w, value)
+			if err != nil {
+				return nil, err
+			}
+			timeOut = int(_timeout)
+		} else {
+			patterns = append(patterns, value.String())
+		}
 	}
-	result := g.w.Expect(patterns...)
+	var result int
+	if timeOut == 0 {
+		result = g.w.Expect(patterns...)
+	} else {
+		result = g.w.ExpectWithTimeout(time.Second*time.Duration(timeOut), patterns...)
+	}
 	return gmnlisp.Integer(result), nil
 }
