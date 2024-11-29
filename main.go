@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -52,7 +53,7 @@ func (g *Global) expect(ctx context.Context, w *gmnlisp.World, args []gmnlisp.No
 	return gmnlisp.Integer(result), nil
 }
 
-func mains() error {
+func mains(args []string) error {
 	term, err := NewTerm()
 	if err != nil {
 		return err
@@ -76,24 +77,26 @@ func mains() error {
 			gmnlisp.NewSymbol("expect*"): &gmnlisp.Function{Min: 1, F: g.expect},
 		})
 
-	_, err = lisp.Interpret(context.Background(), `
-		(spawn "cmd.exe")
-		(block main
-			(while t
-				(case (expect* "xxx" "yyy")
-					((0)
-						(sendln (format nil "~Aexit" (convert 3 <character>)))
-						(return-from main nil)
-						)
-					((1)
-						(sendln (format nil "~Arem" (convert 3 <character>)))
-						)
-					)))`)
+	if len(args) <= 0 {
+		return errors.New("script path required")
+	}
+	script, err := os.ReadFile(args[0])
+	if err != nil {
+		return err
+	}
+
+	posixArgv := []gmnlisp.Node{}
+	for _, s := range args {
+		posixArgv = append(posixArgv, gmnlisp.String(s))
+	}
+	lisp = lisp.Let(&gmnlisp.Pair{Key: gmnlisp.NewSymbol("args"), Value: gmnlisp.List(posixArgv...)})
+
+	_, err = lisp.Interpret(context.Background(), string(script))
 	return err
 }
 
 func main() {
-	if err := mains(); err != nil {
+	if err := mains(os.Args[1:]); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 		os.Exit(1)
 	}
