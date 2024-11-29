@@ -21,6 +21,11 @@ func (g *Global) Close() {
 	g.closer = nil
 }
 
+func (g *Global) send(ctx context.Context, w *gmnlisp.World, arg gmnlisp.Node) (gmnlisp.Node, error) {
+	io.WriteString(g.term, arg.String())
+	return gmnlisp.Null, nil
+}
+
 func (g *Global) sendln(ctx context.Context, w *gmnlisp.World, arg gmnlisp.Node) (gmnlisp.Node, error) {
 	io.WriteString(g.term, arg.String())
 	g.term.Write([]byte{'\r'})

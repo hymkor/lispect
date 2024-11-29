@@ -28,6 +28,7 @@ func mains(args []string) error {
 
 	lisp = lisp.Flet(
 		gmnlisp.Functions{
+			gmnlisp.NewSymbol("send"):    gmnlisp.Function1(g.send),
 			gmnlisp.NewSymbol("sendln"):  gmnlisp.Function1(g.sendln),
 			gmnlisp.NewSymbol("spawn"):   &gmnlisp.Function{Min: 1, F: g.spawn},
 			gmnlisp.NewSymbol("expect*"): gmnlisp.SpecialF(g.expect),
