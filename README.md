@@ -10,7 +10,7 @@ Lispect
   (spawn "cmd.exe" "/k" "set PROMPT=$$$S")
   (spawn "bash"))
 
-(defglobal ctrlc (format nil "~A" (convert 3 <character>)))
+(defglobal ctrlc (create-string 1 (convert 3 <character>)))
 (block main
   (while t
     (expect*
