@@ -1,23 +1,28 @@
-(spawn "cmd.exe")
-(let ((ctrlc (format nil "~A" (convert 3 <character>))))
-  (block main
-    (while t
-      (expect*
-        ("xxx"
-         (send ctrlc)
-         (sendln "exit")
-         (return-from main nil)
-         )
-        (("yyy" "zzz")
-         (send ctrlc)
-         (sendln "rem")
-         )
-        (10 ; timeout second
-         (send ctrlc)
-         (sendln "exit")
-         (return-from main nil)
-        )
-        )
+(if (equal (getenv "OS") "Windows_NT")
+  (spawn "cmd.exe" "/k" "set PROMPT=$$$S")
+  (spawn "bash"))
+
+(defglobal ctrlc (format nil "~A" (convert 3 <character>)))
+(block main
+  (while t
+    (expect*
+      ("xxx"
+       (send ctrlc)
+       (expect "$ ")
+       (sendln "exit")
+       (return-from main nil)
+       )
+      (("yyy" "zzz")
+       (send ctrlc)
+       (expect "$ ")
+       (sendln "echo test")
+       )
+      (10 ; timeout second
+       (send ctrlc)
+       (expect "$ ")
+       (sendln "exit")
+       (return-from main nil)
+       )
       )
     )
   )
