@@ -49,7 +49,7 @@ func (g *Global) spawn(ctx context.Context, w *gmnlisp.World, args []gmnlisp.Nod
 
 var symTimeout = gmnlisp.NewSymbol("timeout")
 
-func (g *Global) expectX(ctx context.Context, w *gmnlisp.World, node gmnlisp.Node) (gmnlisp.Node, error) {
+func (g *Global) expect(ctx context.Context, w *gmnlisp.World, node gmnlisp.Node) (gmnlisp.Node, error) {
 	patterns := []string{}
 	timeOut := 0
 
@@ -84,7 +84,7 @@ func (g *Global) expectX(ctx context.Context, w *gmnlisp.World, node gmnlisp.Nod
 	return gmnlisp.Integer(result), nil
 }
 
-func (g *Global) expect(ctx context.Context, w *gmnlisp.World, node gmnlisp.Node) (gmnlisp.Node, error) {
+func (g *Global) expectX(ctx context.Context, w *gmnlisp.World, node gmnlisp.Node) (gmnlisp.Node, error) {
 
 	patterns := []string{}
 	actions := []gmnlisp.Node{}

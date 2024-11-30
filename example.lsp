@@ -2,7 +2,7 @@
 (let ((ctrlc (format nil "~A" (convert 3 <character>))))
   (block main
     (while t
-      (expect
+      (expect*
         ("xxx"
          (send ctrlc)
          (sendln "exit")
