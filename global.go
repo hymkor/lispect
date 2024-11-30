@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"io"
+	"os"
 	"time"
 
 	"github.com/hymkor/gmnlisp"
@@ -137,4 +138,16 @@ func (g *Global) expectX(ctx context.Context, w *gmnlisp.World, node gmnlisp.Nod
 	} else {
 		return gmnlisp.Progn(ctx, w, timeoutAct)
 	}
+}
+
+func (g *Global) getenv(ctx context.Context, w *gmnlisp.World, arg gmnlisp.Node) (gmnlisp.Node, error) {
+	name, err := gmnlisp.ExpectClass[gmnlisp.String](ctx, w, arg)
+	if err != nil {
+		return nil, err
+	}
+	value, ok := os.LookupEnv(string(name))
+	if !ok {
+		return gmnlisp.Null, nil
+	}
+	return gmnlisp.String(value), nil
 }
