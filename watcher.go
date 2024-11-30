@@ -26,8 +26,9 @@ func NewWatcher(pty io.ReadWriter) *Watcher {
 			// If the code below spends a lot of time,
 			// It hangs up to io.Copy(pty, os.Stdin)
 			// The reason is unknown.
-			os.Stdout.Write(buffer[:n])
-			pipeline <- string(buffer[:n])
+			b := buffer[:n]
+			os.Stdout.Write(b)
+			pipeline <- string(b)
 		}
 	}()
 
