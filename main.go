@@ -51,7 +51,7 @@ func mains(args []string) error {
 	}
 
 	posixArgv := []gmnlisp.Node{}
-	for _, s := range args {
+	for _, s := range args[1:] {
 		posixArgv = append(posixArgv, gmnlisp.String(s))
 	}
 	lisp = lisp.Let(&gmnlisp.Pair{Key: gmnlisp.NewSymbol("args"), Value: gmnlisp.List(posixArgv...)})
