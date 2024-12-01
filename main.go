@@ -50,7 +50,9 @@ func mains(args []string) error {
 	}
 	lisp = lisp.Let(&gmnlisp.Pair{Key: gmnlisp.NewSymbol("args"), Value: gmnlisp.List(posixArgv...)})
 
-	_, err = lisp.Interpret(context.Background(), string(script))
+	ctx, cancel := context.WithCancel(context.Background())
+	_, err = lisp.Interpret(ctx, string(script))
+	cancel()
 	return err
 }
 

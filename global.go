@@ -16,6 +16,8 @@ var (
 	symInterval = gmnlisp.NewSymbol("interval")
 )
 
+var ErrCtrlC = errors.New("^C")
+
 type Global struct {
 	w      *Watcher
 	term   *Term
@@ -73,7 +75,7 @@ func (g *Global) spawn(ctx context.Context, w *gmnlisp.World, args []gmnlisp.Nod
 		argStrings = append(argStrings, s.String())
 	}
 
-	sh := g.term.Command(argStrings[0], argStrings[1:]...)
+	sh := g.term.CommandContext(ctx, argStrings[0], argStrings[1:]...)
 	if err := sh.Start(); err != nil {
 		return nil, err
 	}
@@ -112,6 +114,9 @@ func (g *Global) expect(ctx context.Context, w *gmnlisp.World, node gmnlisp.Node
 		result = g.w.Expect(patterns...)
 	} else {
 		result = g.w.ExpectWithTimeout(time.Second*time.Duration(timeOut), patterns...)
+	}
+	if result == EventCtrlC {
+		return nil, ErrCtrlC
 	}
 	return gmnlisp.Integer(result), nil
 }
@@ -164,7 +169,10 @@ func (g *Global) expectX(ctx context.Context, w *gmnlisp.World, node gmnlisp.Nod
 	} else {
 		result = g.w.ExpectWithTimeout(time.Second*time.Duration(timeoutSec), patterns...)
 	}
-	if result >= 0 {
+
+	if result == EventCtrlC {
+		return nil, ErrCtrlC
+	} else if result >= 0 {
 		return gmnlisp.Progn(ctx, w, actions[result])
 	} else {
 		return gmnlisp.Progn(ctx, w, timeoutAct)

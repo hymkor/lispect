@@ -1,20 +1,37 @@
 package main
 
 import (
+	"bytes"
 	"io"
 	"os"
 	"strings"
 	"time"
 )
 
+const (
+	EventCtrlC   = -2
+	EventTimeOut = -1
+)
+
 type Watcher struct {
 	ch       <-chan string
 	lastline string
+	ctrlc    <-chan struct{}
 }
 
 func NewWatcher(pty io.ReadWriter) *Watcher {
 	pipeline := make(chan string, 1024)
-	go io.Copy(pty, os.Stdin)
+	ctrlc := make(chan struct{}, 100)
+	go func() {
+		for {
+			var buffer [1024]byte
+			n, _ := os.Stdin.Read(buffer[:])
+			pty.Write(buffer[:n])
+			if bytes.IndexByte(buffer[:n], '\x03') >= 0 {
+				ctrlc <- struct{}{}
+			}
+		}
+	}()
 	go func() {
 		for {
 			var buffer [1024]byte
@@ -32,7 +49,7 @@ func NewWatcher(pty io.ReadWriter) *Watcher {
 		}
 	}()
 
-	return &Watcher{ch: pipeline}
+	return &Watcher{ch: pipeline, ctrlc: ctrlc}
 }
 
 func (W *Watcher) checkWords(token string, words []string) int {
@@ -52,12 +69,16 @@ func (W *Watcher) checkWords(token string, words []string) int {
 }
 
 func (W *Watcher) Expect(words ...string) int {
-	for token := range W.ch {
-		if found := W.checkWords(token, words); found >= 0 {
-			return found
+	for {
+		select {
+		case token := <-W.ch:
+			if found := W.checkWords(token, words); found >= 0 {
+				return found
+			}
+		case <-W.ctrlc:
+			return EventCtrlC
 		}
 	}
-	return -1
 }
 
 func (W *Watcher) ExpectWithTimeout(d time.Duration, words ...string) int {
@@ -71,7 +92,9 @@ func (W *Watcher) ExpectWithTimeout(d time.Duration, words ...string) int {
 				return found
 			}
 		case <-timer.C:
-			return -1
+			return EventTimeOut
+		case <-W.ctrlc:
+			return EventCtrlC
 		}
 	}
 }
