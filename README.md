@@ -5,34 +5,41 @@ Lispect
 - It runs on Windows 10 and later, and Linux
 - The script is written in the subset of [ISLisp] ([gmnlisp])
 
-```example.lsp
-(if (equal (getenv "OS") "Windows_NT")
-  (spawn "cmd.exe" "/k" "set PROMPT=$$$S")
-  (spawn "bash"))
+**example.lsp**
 
-(defglobal ctrlc (create-string 1 (convert 3 <character>)))
+```example.lsp
 (block main
-  (while t
-    (expect*
-      ("xxx"
-       (send ctrlc)
-       (expect "$ ")
-       (sendln "exit")
-       (return-from main nil)
-       )
-      (("yyy" "zzz")
-       (send ctrlc)
-       (expect "$ ")
-       (sendln 'interval 200 "echo test")
-       )
-      (10 ; timeout second
-       (send ctrlc)
-       (expect "$ ")
-       (sendln "exit")
-       (return-from main nil)
-       )
+  (if (< (length args) 2)
+    (progn
+      (format (error-output) "Usage: ./lispect example.lsp HOSTNAME PASSWORD~%")
+      (return-from main nil)
       )
     )
+  (defglobal host (car args))
+  (defglobal password (cadr args))
+
+  (spawn "ssh" host)
+  (expect*
+    ("[fingerprint])?"
+     (sendln "yes")
+     (expect "password: ")
+     (sendln password)
+     )
+    ("password: "
+     (sendln password)
+     )
+    ("Connection refused"
+     (return-from main nil)
+     )
+    (30
+     (format (error-output) "TIME OUT~%")
+     (return-from main nil)
+     )
+    )
+  (expect "$ ")
+  (sendln "echo YOU CAN CALL SOME COMMAND HERE")
+  (expect "$ ")
+  (sendln "exit")
   )
 ```
 
