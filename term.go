@@ -25,8 +25,12 @@ func (T *Term) Close() {
 func NewTerm() (*Term, error) {
 	T := &Term{}
 
-	disableStdout, err := virtualterminal.EnableStdout()
-	if err == nil {
+	isTerm := term.IsTerminal(int(os.Stdout.Fd()))
+	if isTerm {
+		disableStdout, err := virtualterminal.EnableStdout()
+		if err != nil {
+			return nil, err
+		}
 		T.closers = append(T.closers, disableStdout)
 	}
 
@@ -44,8 +48,12 @@ func NewTerm() (*Term, error) {
 	}
 	T.closers = append(T.closers, func() { T.Pty.Close() })
 
-	width, height, err := term.GetSize(int(os.Stdout.Fd()))
-	if err == nil {
+	if isTerm {
+		width, height, err := term.GetSize(int(os.Stdout.Fd()))
+		if err != nil {
+			T.Close()
+			return nil, err
+		}
 		T.Pty.Resize(width, height)
 	}
 
