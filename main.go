@@ -28,8 +28,8 @@ func mains(args []string) error {
 
 	lisp = lisp.Flet(
 		gmnlisp.Functions{
-			gmnlisp.NewSymbol("send"):    gmnlisp.Function1(g.send),
-			gmnlisp.NewSymbol("sendln"):  gmnlisp.Function1(g.sendln),
+			gmnlisp.NewSymbol("send"):    &gmnlisp.Function{Min: 1, F: g.send},
+			gmnlisp.NewSymbol("sendln"):  &gmnlisp.Function{Min: 1, F: g.sendln},
 			gmnlisp.NewSymbol("spawn"):   &gmnlisp.Function{Min: 1, F: g.spawn},
 			gmnlisp.NewSymbol("expect*"): gmnlisp.SpecialF(g.expectX),
 			gmnlisp.NewSymbol("expect"):  gmnlisp.SpecialF(g.expect),

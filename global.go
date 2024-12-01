@@ -2,11 +2,18 @@ package main
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"io"
 	"os"
 	"time"
 
 	"github.com/hymkor/gmnlisp"
+)
+
+var (
+	symTimeout  = gmnlisp.NewSymbol("timeout")
+	symInterval = gmnlisp.NewSymbol("interval")
 )
 
 type Global struct {
@@ -22,14 +29,40 @@ func (g *Global) Close() {
 	g.closer = nil
 }
 
-func (g *Global) send(ctx context.Context, w *gmnlisp.World, arg gmnlisp.Node) (gmnlisp.Node, error) {
-	io.WriteString(g.term, arg.String())
+func (g *Global) send(ctx context.Context, w *gmnlisp.World, args []gmnlisp.Node) (gmnlisp.Node, error) {
+	interval := 0
+	for len(args) > 0 {
+		arg := args[0]
+		args = args[1:]
+		if symInterval.Equals(arg, gmnlisp.EQUALP) {
+			if len(args) <= 0 {
+				return nil, errors.New("too few arguments")
+			}
+			_interval, err := gmnlisp.ExpectClass[gmnlisp.Integer](ctx, w, args[0])
+			if err != nil {
+				return nil, err
+			}
+			args = args[1:]
+			interval = int(_interval)
+			continue
+		}
+		if interval > 0 {
+			for _, c := range arg.String() {
+				fmt.Fprintf(g.term, "%c", c)
+				if interval > 0 {
+					time.Sleep(time.Millisecond * time.Duration(interval))
+				}
+			}
+		} else {
+			io.WriteString(g.term, arg.String())
+		}
+	}
 	return gmnlisp.Null, nil
 }
 
-func (g *Global) sendln(ctx context.Context, w *gmnlisp.World, arg gmnlisp.Node) (gmnlisp.Node, error) {
-	io.WriteString(g.term, arg.String())
-	g.term.Write([]byte{'\r'})
+func (g *Global) sendln(ctx context.Context, w *gmnlisp.World, args []gmnlisp.Node) (gmnlisp.Node, error) {
+	args = append(args, gmnlisp.Node(gmnlisp.String("\r")))
+	g.send(ctx, w, args)
 	return gmnlisp.Null, nil
 }
 
@@ -47,8 +80,6 @@ func (g *Global) spawn(ctx context.Context, w *gmnlisp.World, args []gmnlisp.Nod
 	g.closer = append(g.closer, func() { sh.Wait() })
 	return gmnlisp.Null, nil
 }
-
-var symTimeout = gmnlisp.NewSymbol("timeout")
 
 func (g *Global) expect(ctx context.Context, w *gmnlisp.World, node gmnlisp.Node) (gmnlisp.Node, error) {
 	patterns := []string{}
