@@ -35,9 +35,6 @@ func NewWatcher(pty io.ReadWriter) *Watcher {
 	return &Watcher{ch: pipeline}
 }
 
-func (W *Watcher) updateLastLine() {
-}
-
 func (W *Watcher) checkWords(token string, words []string) int {
 	W.lastline += token
 	for i, word := range words {
