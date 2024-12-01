@@ -2,12 +2,14 @@ package main
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"os"
+	"runtime"
 
 	"github.com/hymkor/gmnlisp"
 )
+
+var version string
 
 func mains(args []string) error {
 	term, err := NewTerm()
@@ -37,7 +39,11 @@ func mains(args []string) error {
 		})
 
 	if len(args) <= 0 {
-		return errors.New("script path required")
+		return fmt.Errorf("%s %s-%s-%s: script path required",
+			os.Args[0],
+			version,
+			runtime.GOOS,
+			runtime.GOARCH)
 	}
 	script, err := os.ReadFile(args[0])
 	if err != nil {
