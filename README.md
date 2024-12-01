@@ -3,7 +3,7 @@ Lispect
 
 - A text-terminal automation tool similar to [expect(1)](https://linux.die.net/man/1/expect) of UNIX and Linux
 - It runs on Windows 10 and later, and Linux
-- The script is written in the subset of ISLisp ([gmnlisp](https://github.com/hymkor/gmnlisp))
+- The script is written in the subset of [ISLisp] ([gmnlisp])
 
 ```example.lsp
 (if (equal (getenv "OS") "Windows_NT")
@@ -23,7 +23,7 @@ Lispect
       (("yyy" "zzz")
        (send ctrlc)
        (expect "$ ")
-       (sendln "echo test")
+       (sendln 'interval 200 "echo test")
        )
       (10 ; timeout second
        (send ctrlc)
@@ -36,8 +36,32 @@ Lispect
   )
 ```
 
+### Functions
+
+Parameters enclosed in curly braces {...} are optional and can be omitted.
+
+- `(send {'interval MS} "STRING")`
+    - Send STRING to the terminal
+    - Specify the `'interval MS` option to make the program wait MS milliseconds before outputting each character
+- `(sendln {'interval MS} "STRING")`
+    - send STRING and Enter-key to the terminal
+- `(expect {'timeout SEC} "STRING-0" "STRING-1" ...)`
+    - Wait until STRINGs are found on the terminal
+    - When STRING-n is found on the terminal, it will return n
+    - If a timeout occurs after SEC seconds have elapsed, it returns -1
+- `(expect* ("STRING-0" COMMANDS-0...) ("STRING-1"...)... (SEC COMMANDS-FOR-TIMEOUT...))`
+    - When STRING-n is found on the terminal, COMMANDS-n will be executed
+    - After SEC seconds have elapsed, COMMANDS-FOR-TIMEOUT will be executed
+- `(spawn "COMMANDNAME" "ARG-1" ...)`
+    - Start the executable file
+
+Other functions are defined on [ISLisp]
+
 #### Technologies used
 
 - [Creating a Pseudoconsole session - Windows Console | Microsoft Learn](https://learn.microsoft.com/en-us/windows/console/creating-a-pseudoconsole-session)
 - [aymanbagabas/go-pty: Cross platform Go Pty interface](https://github.com/aymanbagabas/go-pty)
-- [hymkor/gmnlisp: gmnlisp - the subset of ISLisp](https://github.com/hymkor/gmnlisp)
+- [hymkor/gmnlisp: gmnlisp - the subset of ISLisp][gmnlisp]
+
+[ISLisp]: http://islisp.org
+[gmnlisp]: https://github.com/hymkor/gmnlisp
