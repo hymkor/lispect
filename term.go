@@ -26,10 +26,9 @@ func NewTerm() (*Term, error) {
 	T := &Term{}
 
 	disableStdout, err := virtualterminal.EnableStdout()
-	if err != nil {
-		return nil, err
+	if err == nil {
+		T.closers = append(T.closers, disableStdout)
 	}
-	T.closers = append(T.closers, disableStdout)
 
 	disableStdin, err := virtualterminal.EnableStdin()
 	if err != nil {
@@ -46,11 +45,9 @@ func NewTerm() (*Term, error) {
 	T.closers = append(T.closers, func() { T.Pty.Close() })
 
 	width, height, err := term.GetSize(int(os.Stdout.Fd()))
-	if err != nil {
-		T.Close()
-		return nil, err
+	if err == nil {
+		T.Pty.Resize(width, height)
 	}
-	T.Pty.Resize(width, height)
 
 	oldState, err := term.MakeRaw(int(os.Stdin.Fd()))
 	if err != nil {
