@@ -36,7 +36,7 @@ Lispect
   )
 ```
 
-### Functions
+### Functions and variables
 
 Parameters enclosed in curly braces {...} are optional and can be omitted.
 
@@ -54,6 +54,8 @@ Parameters enclosed in curly braces {...} are optional and can be omitted.
     - After SEC seconds have elapsed, COMMANDS-FOR-TIMEOUT will be executed
 - `(spawn "COMMANDNAME" "ARG-1" ...)`
     - Start the executable file
+- `args`
+    - List of command line arguments
 
 Other functions are defined on [ISLisp]
 
