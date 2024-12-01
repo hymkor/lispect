@@ -57,7 +57,7 @@ Parameters enclosed in curly braces {...} are optional and can be omitted.
 
 Other functions are defined on [ISLisp]
 
-#### Technologies used
+### Technologies used
 
 - [Creating a Pseudoconsole session - Windows Console | Microsoft Learn](https://learn.microsoft.com/en-us/windows/console/creating-a-pseudoconsole-session)
 - [aymanbagabas/go-pty: Cross platform Go Pty interface](https://github.com/aymanbagabas/go-pty)
@@ -65,3 +65,24 @@ Other functions are defined on [ISLisp]
 
 [ISLisp]: http://islisp.org
 [gmnlisp]: https://github.com/hymkor/gmnlisp
+[GophaLua]: https://github.com/yuin/gopher-lua
+
+### Comparison with [Expect-lua]
+
+|                       | [Expect-lua]          | Lispect       |
+|-----------------------|-----------------------|---------------|
+| Started               | 2017                  | 2024          |
+| Script                | Lua ([GophaLua])      | ISLisp ([gmnlisp]) |
+| Windows 7/8           | Supported             | Not Supported |
+| Windows 10/11         | Supported             | Supported     |
+| Linux                 | Not Supported         | Supported     |
+| Mechanisms            | [ReadConsoleOutputW]  |[PseudoConsole]|
+| Read Misses           | Possible[^1]          | Unlikely      |
+| Stdout Redirection    | Unavailable           | Available     |
+| Status                | Stable                |Work in Progress|
+
+[^1]: When the output is too excessive, there might be some dropped data
+
+[ReadConsoleOutputW]: https://github.com/hymkor/expect/issues/34
+[PseudoConsole]: https://learn.microsoft.com/en-us/windows/console/creating-a-pseudoconsole-session
+[Expect-lua]: https://github.com/hymkor/expect
