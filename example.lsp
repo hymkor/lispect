@@ -15,7 +15,7 @@
       (("yyy" "zzz")
        (send ctrlc)
        (expect "$ ")
-       (sendln "echo test")
+       (sendln 'interval 200 "echo test")
        )
       (10 ; timeout second
        (send ctrlc)
