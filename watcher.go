@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"io"
 	"os"
 	"strings"
@@ -26,10 +25,19 @@ func NewWatcher(pty io.ReadWriter) *Watcher {
 		for {
 			var buffer [1024]byte
 			n, _ := os.Stdin.Read(buffer[:])
-			pty.Write(buffer[:n])
-			if bytes.IndexByte(buffer[:n], '\x03') >= 0 {
-				ctrlc <- struct{}{}
+			B := buffer[:n]
+			for i, b := range B {
+				if b == '\x03' {
+					ctrlc <- struct{}{}
+					return
+				} else if b == '\x08' {
+					// On CMD.exe, Ctrl-H removes all input text.
+					// ( The reason is unknown )
+					// Therefore, replace Ctrl-H to Backspace-key
+					buffer[i] = '\x7F'
+				}
 			}
+			pty.Write(B)
 		}
 	}()
 	go func() {
