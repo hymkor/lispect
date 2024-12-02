@@ -1,3 +1,5 @@
+[![GoDev](https://pkg.go.dev/badge/github.com/hymkor/lispect)](https://pkg.go.dev/github.com/hymkor/lispect)
+
 Lispect
 =======
 
@@ -45,7 +47,32 @@ Lispect
   )
 ```
 
-### Functions and variables
+Install
+-------
+
+Download the binary package from [Releases](https://github.com/hymkor/lispect/releases) and extract the executable.
+
+### go install
+
+```
+go install github.com/hymkor/lispect@latest
+```
+
+### scoop-installer
+
+```
+scoop install https://raw.githubusercontent.com/hymkor/lispect/master/lispect.json
+```
+
+or
+
+```
+scoop bucket add hymkor https://github.com/hymkor/scoop-bucket
+scoop install lispect
+```
+
+Functions and variables
+-----------------------
 
 Parameters enclosed in curly braces {...} are optional and can be omitted.
 
@@ -72,7 +99,8 @@ Parameters enclosed in curly braces {...} are optional and can be omitted.
 
 Other functions are defined on [ISLisp]
 
-### Comparison with [Expect-lua] and [expect(1)]
+Comparison with [Expect-lua] and [expect(1)]
+--------------------------------------------
 
 |                       | [Expect-lua]          | Lispect       |[expect(1)]
 |-----------------------|-----------------------|---------------|-----------
@@ -92,7 +120,8 @@ Other functions are defined on [ISLisp]
 [PseudoConsole]: https://learn.microsoft.com/en-us/windows/console/creating-a-pseudoconsole-session
 [Expect-lua]: https://github.com/hymkor/expect
 
-### Technologies used
+Technologies used
+-----------------
 
 - [Creating a Pseudoconsole session - Windows Console | Microsoft Learn](https://learn.microsoft.com/en-us/windows/console/creating-a-pseudoconsole-session)
 - [aymanbagabas/go-pty: Cross platform Go Pty interface](https://github.com/aymanbagabas/go-pty)
