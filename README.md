@@ -1,9 +1,11 @@
 Lispect
 =======
 
-- A text-terminal automation tool similar to [expect(1)](https://linux.die.net/man/1/expect) of UNIX and Linux
+- A text-terminal automation tool similar to [expect(1)] of UNIX and Linux
 - It runs on Windows 10 and later, and Linux
 - The script is written in the subset of [ISLisp] ([gmnlisp])
+
+[expect(1)]: https://linux.die.net/man/1/expect
 
 **example.lsp**
 
@@ -70,6 +72,26 @@ Parameters enclosed in curly braces {...} are optional and can be omitted.
 
 Other functions are defined on [ISLisp]
 
+### Comparison with [Expect-lua] and [expect(1)]
+
+|                       | [Expect-lua]          | Lispect       |[expect(1)]
+|-----------------------|-----------------------|---------------|-----------
+| Started               | 2017                  | 2024          | 1990?
+| Script                | Lua ([GophaLua])      | ISLisp ([gmnlisp]) | tcl
+| Windows 7/8           | Supported             | Not Supported | Not Supported
+| Windows 10/11         | Supported             | Supported     | Not Supported
+| Linux                 | Not Supported         | Supported     | Supported
+| Mechanisms            | [ReadConsoleOutputW]  |[PseudoConsole]| PseudoConsole
+| Read Misses           | Possible[^1]          | Unlikely      | Never
+| Stdout Redirection    | Unavailable           | Available     | Available
+| Status                | Stable                |Work in Progress| Stable
+
+[^1]: When the output is too excessive, there might be some dropped data
+
+[ReadConsoleOutputW]: https://github.com/hymkor/expect/issues/34
+[PseudoConsole]: https://learn.microsoft.com/en-us/windows/console/creating-a-pseudoconsole-session
+[Expect-lua]: https://github.com/hymkor/expect
+
 ### Technologies used
 
 - [Creating a Pseudoconsole session - Windows Console | Microsoft Learn](https://learn.microsoft.com/en-us/windows/console/creating-a-pseudoconsole-session)
@@ -79,23 +101,3 @@ Other functions are defined on [ISLisp]
 [ISLisp]: http://islisp.org
 [gmnlisp]: https://github.com/hymkor/gmnlisp
 [GophaLua]: https://github.com/yuin/gopher-lua
-
-### Comparison with [Expect-lua]
-
-|                       | [Expect-lua]          | Lispect       |
-|-----------------------|-----------------------|---------------|
-| Started               | 2017                  | 2024          |
-| Script                | Lua ([GophaLua])      | ISLisp ([gmnlisp]) |
-| Windows 7/8           | Supported             | Not Supported |
-| Windows 10/11         | Supported             | Supported     |
-| Linux                 | Not Supported         | Supported     |
-| Mechanisms            | [ReadConsoleOutputW]  |[PseudoConsole]|
-| Read Misses           | Possible[^1]          | Unlikely      |
-| Stdout Redirection    | Unavailable           | Available     |
-| Status                | Stable                |Work in Progress|
-
-[^1]: When the output is too excessive, there might be some dropped data
-
-[ReadConsoleOutputW]: https://github.com/hymkor/expect/issues/34
-[PseudoConsole]: https://learn.microsoft.com/en-us/windows/console/creating-a-pseudoconsole-session
-[Expect-lua]: https://github.com/hymkor/expect
