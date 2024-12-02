@@ -54,9 +54,14 @@ func mains(args []string) error {
 	for _, s := range args[1:] {
 		posixArgv = append(posixArgv, gmnlisp.String(s))
 	}
+	executable := os.Args[0]
+	if value, err := os.Executable(); err == nil {
+		executable = value
+	}
 	lisp = lisp.Let(gmnlisp.Variables{
-		gmnlisp.NewSymbol("args"):          gmnlisp.List(posixArgv...),
-		gmnlisp.NewSymbol("$PROGRAM_NAME"): gmnlisp.String(args[0]),
+		gmnlisp.NewSymbol("args"):             gmnlisp.List(posixArgv...),
+		gmnlisp.NewSymbol("$PROGRAM_NAME"):    gmnlisp.String(args[0]),
+		gmnlisp.NewSymbol("$EXECUTABLE_NAME"): gmnlisp.String(executable),
 	})
 
 	ctx, cancel := context.WithCancel(context.Background())
