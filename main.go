@@ -26,6 +26,8 @@ func mains(args []string) error {
 	}
 	defer g.Close()
 
+	gmnlisp.NewLineOnFormat = []byte{'\r', '\n'}
+
 	lisp := gmnlisp.New()
 
 	lisp = lisp.Flet(
