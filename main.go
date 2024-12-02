@@ -54,7 +54,10 @@ func mains(args []string) error {
 	for _, s := range args[1:] {
 		posixArgv = append(posixArgv, gmnlisp.String(s))
 	}
-	lisp = lisp.Let(&gmnlisp.Pair{Key: gmnlisp.NewSymbol("args"), Value: gmnlisp.List(posixArgv...)})
+	lisp = lisp.Let(gmnlisp.Variables{
+		gmnlisp.NewSymbol("args"):          gmnlisp.List(posixArgv...),
+		gmnlisp.NewSymbol("$PROGRAM_NAME"): gmnlisp.String(args[0]),
+	})
 
 	ctx, cancel := context.WithCancel(context.Background())
 	_, err = lisp.Interpret(ctx, string(script))
