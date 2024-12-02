@@ -11,7 +11,7 @@ Lispect
 (block main
   (if (< (length args) 2)
     (progn
-      (format (error-output) "Usage: lispect ~A HOSTNAME PASSWORD~%" $PROGRAM_NAME)
+      (format (error-output) "Usage: ~A ~A HOSTNAME PASSWORD~%" $EXECUTABLE_NAME $PROGRAM_NAME)
       (return-from main nil)
       )
     )
@@ -64,7 +64,9 @@ Parameters enclosed in curly braces {...} are optional and can be omitted.
 - `args`
     - The list of command line arguments
 - `$PROGRAM_NAME`
-    - The name of the script
+    - The path of the script
+- `$EXECUTABLE_NAME`
+    - The path of the executable of lispect
 
 Other functions are defined on [ISLisp]
 

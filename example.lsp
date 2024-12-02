@@ -1,7 +1,7 @@
 (block main
   (if (< (length args) 2)
     (progn
-      (format (error-output) "Usage: lispect ~A HOSTNAME PASSWORD~%" $PROGRAM_NAME)
+      (format (error-output) "Usage: ~A ~A HOSTNAME PASSWORD~%" $EXECUTABLE_NAME $PROGRAM_NAME)
       (return-from main nil)
       )
     )
