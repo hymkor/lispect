@@ -11,7 +11,7 @@ Lispect
 (block main
   (if (< (length args) 2)
     (progn
-      (format (error-output) "Usage: ./lispect example.lsp HOSTNAME PASSWORD~%")
+      (format (error-output) "Usage: lispect ~A HOSTNAME PASSWORD~%" $PROGRAM_NAME)
       (return-from main nil)
       )
     )
@@ -62,7 +62,9 @@ Parameters enclosed in curly braces {...} are optional and can be omitted.
 - `(spawn "COMMANDNAME" "ARG-1" ...)`
     - Start the executable file
 - `args`
-    - List of command line arguments
+    - The list of command line arguments
+- `$PROGRAM_NAME`
+    - The name of the script
 
 Other functions are defined on [ISLisp]
 

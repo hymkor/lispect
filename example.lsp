@@ -1,7 +1,7 @@
 (block main
   (if (< (length args) 2)
     (progn
-      (format (error-output) "Usage: ./lispect example.lsp HOSTNAME PASSWORD~%")
+      (format (error-output) "Usage: lispect ~A HOSTNAME PASSWORD~%" $PROGRAM_NAME)
       (return-from main nil)
       )
     )
