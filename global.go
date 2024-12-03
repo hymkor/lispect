@@ -14,6 +14,7 @@ import (
 var (
 	symTimeout  = gmnlisp.NewSymbol("timeout")
 	symInterval = gmnlisp.NewSymbol("interval")
+	symMatch    = gmnlisp.NewSymbol("$MATCH")
 )
 
 var ErrCtrlC = errors.New("^C")
@@ -173,7 +174,8 @@ func (g *Global) expectX(ctx context.Context, w *gmnlisp.World, node gmnlisp.Nod
 	if result == EventCtrlC {
 		return nil, ErrCtrlC
 	} else if result >= 0 {
-		return gmnlisp.Progn(ctx, w, actions[result])
+		_w := w.Let(&gmnlisp.Pair{Key: symMatch, Value: gmnlisp.String(patterns[result])})
+		return gmnlisp.Progn(ctx, _w, actions[result])
 	} else {
 		return gmnlisp.Progn(ctx, w, timeoutAct)
 	}
