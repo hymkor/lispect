@@ -2,6 +2,7 @@
 - On gmnlisp changes
     - Support unicode character literal `#\U3042` like CommonLisp
 - Implement `(setenv "NAME" "VALUE")`
+- Implement `$MATCH` - the matching string in the block of `(expect*)`
 
 v0.1.0
 ======
