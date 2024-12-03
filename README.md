@@ -92,12 +92,16 @@ Parameters enclosed in curly braces {...} are optional and can be omitted.
     - Start the executable file
 - `(getenv "NAME")`
     - Get the value of the environment variable NAME
+- `(setenv "NAME" "VALUE")`
+    - Set the value of the environment variable NAME as VALUE
 - `args`
     - The list of command line arguments
 - `$PROGRAM_NAME`
     - The path of the script
 - `$EXECUTABLE_NAME`
     - The path of the executable of lispect
+- `$MATCH`
+    - The matching string in the block of `(expect*)`
 
 Other functions are defined on [ISLisp]
 
