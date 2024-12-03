@@ -38,6 +38,7 @@ func mains(args []string) error {
 			gmnlisp.NewSymbol("expect*"): gmnlisp.SpecialF(g.expectX),
 			gmnlisp.NewSymbol("expect"):  gmnlisp.SpecialF(g.expect),
 			gmnlisp.NewSymbol("getenv"):  gmnlisp.Function1(g.getenv),
+			gmnlisp.NewSymbol("setenv"):  gmnlisp.Function2(g.setenv),
 		})
 
 	if len(args) <= 0 {

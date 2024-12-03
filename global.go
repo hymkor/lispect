@@ -190,3 +190,22 @@ func (g *Global) getenv(ctx context.Context, w *gmnlisp.World, arg gmnlisp.Node)
 	}
 	return gmnlisp.String(value), nil
 }
+
+func (g *Global) setenv(ctx context.Context, w *gmnlisp.World, __key, __val gmnlisp.Node) (gmnlisp.Node, error) {
+	_key, err := gmnlisp.ExpectClass[gmnlisp.String](ctx, w, __key)
+	if err != nil {
+		return nil, err
+	}
+	key := string(_key)
+
+	if gmnlisp.IsNull(__val) {
+		return gmnlisp.Null, os.Unsetenv(key)
+	}
+	_val, err := gmnlisp.ExpectClass[gmnlisp.String](ctx, w, __val)
+	if err != nil {
+		return nil, err
+	}
+	val := string(_val)
+
+	return gmnlisp.Null, os.Setenv(key, val)
+}
