@@ -90,6 +90,8 @@ Parameters enclosed in curly braces {...} are optional and can be omitted.
     - After SEC seconds have elapsed, COMMANDS-FOR-TIMEOUT will be executed
 - `(spawn "COMMANDNAME" "ARG-1" ...)`
     - Start the executable file
+- `(getenv "NAME")`
+    - Get the value of the environment variable NAME
 - `args`
     - The list of command line arguments
 - `$PROGRAM_NAME`
