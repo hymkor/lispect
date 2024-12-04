@@ -1,3 +1,7 @@
+v0.2.0
+======
+Dec.4, 2024
+
 - Fix: on Linux, `~%` feeded line, but it did not carriage return
 - On gmnlisp changes
     - Support unicode character literal `#\U3042` like CommonLisp
