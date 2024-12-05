@@ -63,9 +63,9 @@ func mains(args []string) error {
 		executable = value
 	}
 	lisp = lisp.Let(gmnlisp.Variables{
-		gmnlisp.NewSymbol("args"):             gmnlisp.List(posixArgv...),
-		gmnlisp.NewSymbol("$PROGRAM_NAME"):    gmnlisp.String(args[0]),
-		gmnlisp.NewSymbol("$EXECUTABLE_NAME"): gmnlisp.String(executable),
+		gmnlisp.NewSymbol("ARGV"):            gmnlisp.List(posixArgv...),
+		gmnlisp.NewSymbol("PROGRAM-NAME"):    gmnlisp.String(args[0]),
+		gmnlisp.NewSymbol("EXECUTABLE-NAME"): gmnlisp.String(executable),
 	})
 
 	ctx, cancel := context.WithCancel(context.Background())
