@@ -113,7 +113,7 @@ Parameters enclosed in curly braces {...} are optional and can be omitted.
     - The path of the script
 - `EXECUTABLE-NAME`
     - The path of the executable of lispect
-- `$MATCH`
+- `MATCH`
     - The matching string in the block of `(expect*)`
 
 Other functions are defined on [ISLisp]
