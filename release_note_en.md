@@ -5,6 +5,8 @@
     - `$PROGRAM_NAME` → `PROGRAM-NAME`
     - `$EXECUTABLE_NAME` → `EXECUTABLE-NAME`
 - Fix: `(expect "B")` after `(expect "A")` sometimes missed B when `"A\nB"` was output at once time
+- Changes on gmnlisp
+    - Fix: panic when the token is only `#\`
 
 v0.2.0
 ======

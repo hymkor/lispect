@@ -5,6 +5,8 @@
     - `$PROGRAM_NAME` → `PROGRAM-NAME`
     - `$EXECUTABLE_NAME` → `EXECUTABLE-NAME`
 - `"A\nB"` を一括して出力された時、`(expect "A")` の後の `(expect "B")` が B を見逃す不具合を修正
+- gmnlisp 側修正
+    - `#\` だけのトークンがあるとクラッシュする不具合を修正
 
 v0.2.0
 ======
