@@ -30,6 +30,9 @@
 
     (expect*
       ("Permission denied"
+       (expect "password:")
+       (send #\U3)
+       (wait sshpid)
        (return-from main nil)
        )
       ("$ "))
