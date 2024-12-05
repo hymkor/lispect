@@ -214,3 +214,18 @@ func (g *Global) setenv(ctx context.Context, w *gmnlisp.World, __key, __val gmnl
 
 	return gmnlisp.Null, os.Setenv(key, val)
 }
+
+func (g *Global) wait(ctx context.Context, w *gmnlisp.World, pidNode gmnlisp.Node) (gmnlisp.Node, error) {
+	pidInteger, err := gmnlisp.ExpectClass[gmnlisp.Integer](ctx, w, pidNode)
+	if err != nil {
+		return nil, err
+	}
+	pid := int(pidInteger)
+
+	process, err := os.FindProcess(pid)
+	if err != nil {
+		return gmnlisp.Null, nil
+	}
+	_, err = process.Wait()
+	return gmnlisp.Null, err
+}
