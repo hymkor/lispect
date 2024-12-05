@@ -14,7 +14,7 @@ import (
 var (
 	symTimeout  = gmnlisp.NewSymbol("timeout")
 	symInterval = gmnlisp.NewSymbol("interval")
-	symMatch    = gmnlisp.NewSymbol("$MATCH")
+	symMatch    = gmnlisp.NewSymbol("MATCH")
 )
 
 var ErrCtrlC = errors.New("^C")
