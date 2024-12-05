@@ -76,11 +76,14 @@ func (g *Global) spawn(ctx context.Context, w *gmnlisp.World, args []gmnlisp.Nod
 		argStrings = append(argStrings, s.String())
 	}
 
-	sh := g.term.CommandContext(ctx, argStrings[0], argStrings[1:]...)
-	if err := sh.Start(); err != nil {
+	cmd := g.term.CommandContext(ctx, argStrings[0], argStrings[1:]...)
+	if err := cmd.Start(); err != nil {
 		return nil, err
 	}
-	g.closer = append(g.closer, func() { sh.Wait() })
+	g.closer = append(g.closer, func() { cmd.Wait() })
+	if p := cmd.Process; p != nil {
+		return gmnlisp.Integer(p.Pid), nil
+	}
 	return gmnlisp.Null, nil
 }
 
