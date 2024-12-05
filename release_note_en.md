@@ -4,7 +4,7 @@
     - `args` → `ARGV`
     - `$PROGRAM_NAME` → `PROGRAM-NAME`
     - `$EXECUTABLE_NAME` → `EXECUTABLE-NAME`
-- Fix: expect: when monitoring words were output in succession, the latter was sometimes overlooked
+- Fix: `(expect "B")` after `(expect "A")` sometimes missed B when `"A\nB"` was output at once time
 
 v0.2.0
 ======

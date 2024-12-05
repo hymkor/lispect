@@ -4,7 +4,7 @@
     - `args` → `ARGV`
     - `$PROGRAM_NAME` → `PROGRAM-NAME`
     - `$EXECUTABLE_NAME` → `EXECUTABLE-NAME`
-- expect: 監視語がたてつづけに出力された時、後のものを見逃す時があった点を修正
+- `"A\nB"` を一括して出力された時、`(expect "A")` の後の `(expect "B")` が B を見逃す不具合を修正
 
 v0.2.0
 ======
