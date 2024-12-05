@@ -107,11 +107,11 @@ Parameters enclosed in curly braces {...} are optional and can be omitted.
     - Get the value of the environment variable NAME
 - `(setenv "NAME" "VALUE")`
     - Set the value of the environment variable NAME as VALUE
-- `args`
+- `ARGV`
     - The list of command line arguments
-- `$PROGRAM_NAME`
+- `PROGRAM-NAME`
     - The path of the script
-- `$EXECUTABLE_NAME`
+- `EXECUTABLE-NAME`
     - The path of the executable of lispect
 - `$MATCH`
     - The matching string in the block of `(expect*)`
