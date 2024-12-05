@@ -77,6 +77,9 @@ func (W *Watcher) checkWords(token string, words []string) int {
 }
 
 func (W *Watcher) Expect(words ...string) int {
+	if found := W.checkWords("", words); found >= 0 {
+		return found
+	}
 	for {
 		select {
 		case token := <-W.ch:
@@ -90,6 +93,10 @@ func (W *Watcher) Expect(words ...string) int {
 }
 
 func (W *Watcher) ExpectWithTimeout(d time.Duration, words ...string) int {
+	if found := W.checkWords("", words); found >= 0 {
+		return found
+	}
+
 	timer := time.NewTimer(d)
 	defer timer.Stop()
 
