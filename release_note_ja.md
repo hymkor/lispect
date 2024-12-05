@@ -1,3 +1,6 @@
+- システム変数名を変更 (**Breaking changes**)
+    - `$MATCH` → `MATCH`
+
 v0.3.0
 =======
 Dec.5, 2024

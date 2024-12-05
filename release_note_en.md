@@ -1,3 +1,6 @@
+- Rename system variables (**Breaking changes**)
+    - `$MATCH` → `MATCH`
+
 v0.3.0
 =======
 Dec.5, 2024
