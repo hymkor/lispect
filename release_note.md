@@ -1,5 +1,9 @@
 - `(spawn)` returns a process-id now
 - Implement `(wait PROCESS-ID)`
+- Rename system variables (**Breaking changes**)
+    - `args` → `ARGV`
+    - `$PROGRAM_NAME` → `PROGRAM-NAME`
+    - `$EXECUTABLE_NAME` → `EXECUTABLE-NAME`
 
 v0.2.0
 ======
