@@ -1,3 +1,6 @@
+- `(spawn)` returns a process-id now
+- Implement `(wait PROCESS-ID)`
+
 v0.2.0
 ======
 Dec.4, 2024
