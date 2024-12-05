@@ -1,3 +1,7 @@
+v0.3.0
+=======
+Dec.5, 2024
+
 - `(spawn)` returns a process-id now
 - Implement `(wait PROCESS-ID)`
 - Rename system variables (**Breaking changes**)
