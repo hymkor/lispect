@@ -1,3 +1,7 @@
+v0.4.0
+======
+Dec.8, 2024
+
 - Rename system variables (**Breaking changes**)
     - `$MATCH` → `MATCH`
 - Update gmnlisp to v0.7.4

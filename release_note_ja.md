@@ -1,3 +1,7 @@
+v0.4.0
+======
+Dec.8, 2024
+
 - システム変数名を変更 (**Breaking changes**)
     - `$MATCH` → `MATCH`
 - gmnlisp を v0.7.4 相当へ
