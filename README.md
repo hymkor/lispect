@@ -115,6 +115,12 @@ Parameters enclosed in curly braces {...} are optional and can be omitted.
     - The path of the executable of lispect
 - `MATCH`
     - The matching string in the block of `(expect*)`
+- `(block NAME FORM...)` and `(return-from NAME RESULT-FORM)`
+    - Non-local exits. See also [ISLISP draft - 14.7. Non-local exits](https://islisp-dev.github.io/ISLispHyperDraft/islisp-v23.html#non_local_exits)
+- `(with-handler HANDLER FORM...)`
+    - When an error occurs in `FORMS...`, call `HANDLER`.
+      See also [ISLISP Draft - Operations relating to condition handling](https://islisp-dev.github.io/ISLispHyperDraft/islisp-v23.html#s_with_handler)
+
 
 Other functions are defined on [ISLisp]
 
