@@ -1,5 +1,6 @@
 - Rename system variables (**Breaking changes**)
     - `$MATCH` → `MATCH`
+- Update gmnlisp to v0.7.4
 
 v0.3.0
 =======

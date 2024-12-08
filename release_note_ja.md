@@ -1,5 +1,6 @@
 - システム変数名を変更 (**Breaking changes**)
     - `$MATCH` → `MATCH`
+- gmnlisp を v0.7.4 相当へ
 
 v0.3.0
 =======
