@@ -11,6 +11,9 @@ Lispect
 
 **example.lsp**
 
+$ `lispect example.lsp USERNAME@DOMAIN PASSWORD`  
+→ login `USERNAME@DOMAIN` with `ssh` and input `PASSWORD` automatically
+
 ```example.lsp
 (block main
   (if (< (length ARGV) 2)
