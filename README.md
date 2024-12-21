@@ -15,11 +15,11 @@ $ `lispect example.lsp USERNAME@DOMAIN PASSWORD`
 → login `USERNAME@DOMAIN` with `ssh` and input `PASSWORD` automatically
 
 ```example.lsp
-(block main
+(catch 'fail
   (if (< (length ARGV) 2)
     (progn
       (format (error-output) "Usage: ~A ~A USERNAME@DOMAIN PASSWORD~%" EXECUTABLE-NAME PROGRAM-NAME)
-      (return-from main nil)))
+      (throw 'fail nil)))
 
   (let ((account (car ARGV))
         (password (cadr ARGV))
@@ -28,29 +28,29 @@ $ `lispect example.lsp USERNAME@DOMAIN PASSWORD`
     (with-handler
       (lambda (c)
         (format (error-output) "ssh is not found~%")
-        (return-from main nil))
+        (throw 'fail nil))
       (setq sshpid (spawn "ssh" account)))
 
     (expect*
       ("[fingerprint])?"
        (sendln "yes")
-       (expect "password: ")
+       (expect "password:")
        (sendln password))
-      ("password: "
+      ("password:"
        (sendln password))
       (("Connection refused"
         "Could not resolve hostname")
-       (return-from main nil))
+       (throw 'fail nil))
       (30
        (format (error-output) "TIME OUT~%")
-       (return-from main nil)))
+       (throw 'fail nil)))
 
     (expect*
       ("Permission denied"
        (expect "password:")
        (send #\U3)
        (wait sshpid)
-       (return-from main nil)
+       (throw 'fail nil)
        )
       ("$ "))
     (sendln "echo YOU CAN CALL SOME COMMAND HERE")
@@ -118,7 +118,7 @@ Parameters enclosed in curly braces {...} are optional and can be omitted.
     - The path of the executable of lispect
 - `MATCH`
     - The matching string in the block of `(expect*)`
-- `(block NAME FORM...)` and `(return-from NAME RESULT-FORM)`
+- `(catch TAG-FORM FORM...)` and `(throw TAG-FORM RESULT-FORM)`
     - Non-local exits. See also [ISLISP draft - 14.7. Non-local exits](https://islisp-dev.github.io/ISLispHyperDraft/islisp-v23.html#non_local_exits)
 - `(with-handler HANDLER FORM...)`
     - When an error occurs in `FORMS...`, call `HANDLER`.
