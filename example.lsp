@@ -17,9 +17,9 @@
     (expect*
       ("[fingerprint])?"
        (sendln "yes")
-       (expect "password: ")
+       (expect "password:")
        (sendln password))
-      ("password: "
+      ("password:"
        (sendln password))
       (("Connection refused"
         "Could not resolve hostname")
