@@ -1,3 +1,7 @@
+v0.4.1
+======
+Jan 16, 2025
+
 - Update gmnlisp to v0.7.8
 
 v0.4.0
