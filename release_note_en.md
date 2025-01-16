@@ -1,3 +1,5 @@
+- Update gmnlisp to v0.7.8
+
 v0.4.0
 ======
 Dec.8, 2024
