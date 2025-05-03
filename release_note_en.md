@@ -1,3 +1,10 @@
+- Refactor: split code into two packages: (Thanks to [@rwinkhart])
+    - `main` package for the CLI: `github.com/hymkor/lispect/cmd/lispect`
+    - `lispect` package for library use: `github.com/hymkor/lispect`
+- Dependency: Bump `gmnlisp` to v0.7.9
+
+[@rwinkhart]: https://github.com/rwinkhart
+
 v0.4.1
 ======
 Jan 16, 2025

@@ -1,3 +1,10 @@
+- ソースを二つのパッケージへ分割した (Thanks to [@rwinkhart])
+    - `main` パッケージ(実行ファイル用): `github.com/hymkor/lispect/cmd/lispect`
+    - `lispect` パッケージ(ライブラリ用): `github.com/hymkor/lispect`
+- gmnlisp を v0.7.9 へバージョンアップした
+
+[@rwinkhart]: https://github.com/rwinkhart
+
 v0.4.1
 ======
 Jan 16, 2025
