@@ -1,3 +1,7 @@
+v0.5.0
+======
+May 3, 2025
+
 - ソースを二つのパッケージへ分割した (Thanks to [@rwinkhart])
     - `main` パッケージ(実行ファイル用): `github.com/hymkor/lispect/cmd/lispect`
     - `lispect` パッケージ(ライブラリ用): `github.com/hymkor/lispect`

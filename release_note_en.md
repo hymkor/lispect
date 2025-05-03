@@ -1,3 +1,7 @@
+v0.5.0
+======
+May 3, 2025
+
 - Refactor: split code into two packages: (Thanks to [@rwinkhart])
     - `main` package for the CLI: `github.com/hymkor/lispect/cmd/lispect`
     - `lispect` package for library use: `github.com/hymkor/lispect`
