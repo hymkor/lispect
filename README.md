@@ -158,3 +158,15 @@ Technologies used
 [ISLisp]: http://islisp.org
 [gmnlisp]: https://github.com/hymkor/gmnlisp
 [GophaLua]: https://github.com/yuin/gopher-lua
+
+Acknowledgements
+----------------
+
+Thanks to the following contributors:
+
+- [@rwinkhart](https://github.com/rwinkhart) - [#1](https://github.com/hymkor/lispect/pull/1) : modularization support
+
+Author
+------
+
+This project is developed and maintained by [@hymkor](https://github.com/hymkor)
