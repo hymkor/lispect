@@ -69,7 +69,7 @@ Download the binary package from [Releases](https://github.com/hymkor/lispect/re
 ### go install
 
 ```
-go install github.com/hymkor/lispect@latest
+go install github.com/hymkor/lispect/cmd/lispect@latest
 ```
 
 ### scoop-installer
