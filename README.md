@@ -14,15 +14,18 @@ Lispect
 $ `lispect example.lsp USERNAME@DOMAIN PASSWORD`  
 → login `USERNAME@DOMAIN` with `ssh` and input `PASSWORD` automatically
 
+> [!NOTE]
+> Some variable names have been updated for compatibility with recent versions of gmnlisp, but the old names remain available for now.
+
 ```example.lsp
 (catch 'fail
   (if (< (length ARGV) 2)
     (progn
-      (format (error-output) "Usage: ~A ~A USERNAME@DOMAIN PASSWORD~%" EXECUTABLE-NAME PROGRAM-NAME)
+      (format (error-output) "Usage: ~A ~A USERNAME@DOMAIN PASSWORD~%" *executable-name* *program-name*)
       (throw 'fail nil)))
 
-  (let ((account (car ARGV))
-        (password (cadr ARGV))
+  (let ((account (car *argv*))
+        (password (cadr *argv*))
         (sshpid nil))
 
     (with-handler
@@ -110,20 +113,21 @@ Parameters enclosed in curly braces {...} are optional and can be omitted.
     - Get the value of the environment variable NAME
 - `(setenv "NAME" "VALUE")`
     - Set the value of the environment variable NAME as VALUE
-- `ARGV`
-    - The list of command line arguments
-- `PROGRAM-NAME`
-    - The path of the script
-- `EXECUTABLE-NAME`
-    - The path of the executable of lispect
-- `MATCH`
-    - The matching string in the block of `(expect*)`
+- `*argv*` (formerly `ARGV`, now deprecated)[^1]  
+  The list of command-line arguments.
+- `*program-name*` (formerly `PROGRAM-NAME`, now deprecated)[^1]  
+  The path to the script.
+- `*executable-name*` (formerly `EXECUTABLE-NAME`, now deprecated)[^1]  
+  The path to the Lispect executable.
+- `*match*` (formerly `MATCH`, now deprecated)[^1]  
+  The matched string in an `(expect*)` block.
 - `(catch TAG-FORM FORM...)` and `(throw TAG-FORM RESULT-FORM)`
     - Non-local exits. See also [ISLISP draft - 14.7. Non-local exits](https://islisp-dev.github.io/ISLispHyperDraft/islisp-v23.html#non_local_exits)
 - `(with-handler HANDLER FORM...)`
     - When an error occurs in `FORMS...`, call `HANDLER`.
       See also [ISLISP Draft - Operations relating to condition handling](https://islisp-dev.github.io/ISLispHyperDraft/islisp-v23.html#s_with_handler)
 
+[^1]: These variable names were changed to accommodate gmnlisp v0.7.10 and later, in which symbol names are case-insensitive. The new format avoids potential name conflicts.
 
 Other functions are defined on [ISLisp]
 
