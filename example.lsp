@@ -1,11 +1,11 @@
 (catch 'fail
   (if (< (length ARGV) 2)
     (progn
-      (format (error-output) "Usage: ~A ~A USERNAME@DOMAIN PASSWORD~%" EXECUTABLE-NAME PROGRAM-NAME)
+      (format (error-output) "Usage: ~A ~A USERNAME@DOMAIN PASSWORD~%" *executable-name* *program-name*)
       (throw 'fail nil)))
 
-  (let ((account (car ARGV))
-        (password (cadr ARGV))
+  (let ((account (car *argv*))
+        (password (cadr *argv*))
         (sshpid nil))
 
     (with-handler
