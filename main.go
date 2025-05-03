@@ -34,11 +34,11 @@ func RunString(script string, args []string) error {
 
 	watcher := NewWatcher(term)
 
-	g := &Global{
+	env := &Env{
 		term: term,
 		w:    watcher,
 	}
-	defer g.Close()
+	defer env.Close()
 
 	gmnlisp.NewLineOnFormat = []byte{'\r', '\n'}
 
@@ -46,14 +46,14 @@ func RunString(script string, args []string) error {
 
 	lisp = lisp.Flet(
 		gmnlisp.Functions{
-			gmnlisp.NewSymbol("send"):    &gmnlisp.Function{Min: 1, F: g.send},
-			gmnlisp.NewSymbol("sendln"):  &gmnlisp.Function{Min: 1, F: g.sendln},
-			gmnlisp.NewSymbol("spawn"):   &gmnlisp.Function{Min: 1, F: g.spawn},
-			gmnlisp.NewSymbol("expect*"): gmnlisp.SpecialF(g.expectX),
-			gmnlisp.NewSymbol("expect"):  gmnlisp.SpecialF(g.expect),
-			gmnlisp.NewSymbol("getenv"):  gmnlisp.Function1(g.getenv),
-			gmnlisp.NewSymbol("setenv"):  gmnlisp.Function2(g.setenv),
-			gmnlisp.NewSymbol("wait"):    gmnlisp.Function1(g.wait),
+			gmnlisp.NewSymbol("send"):    &gmnlisp.Function{Min: 1, F: env.send},
+			gmnlisp.NewSymbol("sendln"):  &gmnlisp.Function{Min: 1, F: env.sendln},
+			gmnlisp.NewSymbol("spawn"):   &gmnlisp.Function{Min: 1, F: env.spawn},
+			gmnlisp.NewSymbol("expect*"): gmnlisp.SpecialF(env.expectX),
+			gmnlisp.NewSymbol("expect"):  gmnlisp.SpecialF(env.expect),
+			gmnlisp.NewSymbol("getenv"):  gmnlisp.Function1(env.getenv),
+			gmnlisp.NewSymbol("setenv"):  gmnlisp.Function2(env.setenv),
+			gmnlisp.NewSymbol("wait"):    gmnlisp.Function1(env.wait),
 		})
 	posixArgv := []gmnlisp.Node{}
 	for _, s := range args[1:] {

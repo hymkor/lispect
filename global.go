@@ -19,20 +19,20 @@ var (
 
 var ErrCtrlC = errors.New("^C")
 
-type Global struct {
+type Env struct {
 	w      *Watcher
 	term   *Term
 	closer []func()
 }
 
-func (g *Global) Close() {
-	for i := len(g.closer) - 1; i >= 0; i-- {
-		g.closer[i]()
+func (env *Env) Close() {
+	for i := len(env.closer) - 1; i >= 0; i-- {
+		env.closer[i]()
 	}
-	g.closer = nil
+	env.closer = nil
 }
 
-func (g *Global) send(ctx context.Context, w *gmnlisp.World, args []gmnlisp.Node) (gmnlisp.Node, error) {
+func (env *Env) send(ctx context.Context, w *gmnlisp.World, args []gmnlisp.Node) (gmnlisp.Node, error) {
 	interval := 0
 	for len(args) > 0 {
 		arg := args[0]
@@ -51,43 +51,43 @@ func (g *Global) send(ctx context.Context, w *gmnlisp.World, args []gmnlisp.Node
 		}
 		if interval > 0 {
 			for _, c := range arg.String() {
-				fmt.Fprintf(g.term, "%c", c)
+				fmt.Fprintf(env.term, "%c", c)
 				if interval > 0 {
 					time.Sleep(time.Millisecond * time.Duration(interval))
 				}
 			}
 		} else {
-			io.WriteString(g.term, arg.String())
+			io.WriteString(env.term, arg.String())
 		}
 	}
 	return gmnlisp.Null, nil
 }
 
-func (g *Global) sendln(ctx context.Context, w *gmnlisp.World, args []gmnlisp.Node) (gmnlisp.Node, error) {
+func (env *Env) sendln(ctx context.Context, w *gmnlisp.World, args []gmnlisp.Node) (gmnlisp.Node, error) {
 	args = append(args, gmnlisp.Node(gmnlisp.String("\r")))
-	g.send(ctx, w, args)
+	env.send(ctx, w, args)
 	return gmnlisp.Null, nil
 }
 
-func (g *Global) spawn(ctx context.Context, w *gmnlisp.World, args []gmnlisp.Node) (gmnlisp.Node, error) {
+func (env *Env) spawn(ctx context.Context, w *gmnlisp.World, args []gmnlisp.Node) (gmnlisp.Node, error) {
 
 	argStrings := make([]string, 0, len(args))
 	for _, s := range args {
 		argStrings = append(argStrings, s.String())
 	}
 
-	cmd := g.term.CommandContext(ctx, argStrings[0], argStrings[1:]...)
+	cmd := env.term.CommandContext(ctx, argStrings[0], argStrings[1:]...)
 	if err := cmd.Start(); err != nil {
 		return nil, err
 	}
-	g.closer = append(g.closer, func() { cmd.Wait() })
+	env.closer = append(env.closer, func() { cmd.Wait() })
 	if p := cmd.Process; p != nil {
 		return gmnlisp.Integer(p.Pid), nil
 	}
 	return gmnlisp.Null, nil
 }
 
-func (g *Global) expect(ctx context.Context, w *gmnlisp.World, node gmnlisp.Node) (gmnlisp.Node, error) {
+func (env *Env) expect(ctx context.Context, w *gmnlisp.World, node gmnlisp.Node) (gmnlisp.Node, error) {
 	patterns := []string{}
 	timeOut := 0
 
@@ -115,9 +115,9 @@ func (g *Global) expect(ctx context.Context, w *gmnlisp.World, node gmnlisp.Node
 	}
 	var result int
 	if timeOut == 0 {
-		result = g.w.Expect(patterns...)
+		result = env.w.Expect(patterns...)
 	} else {
-		result = g.w.ExpectWithTimeout(time.Second*time.Duration(timeOut), patterns...)
+		result = env.w.ExpectWithTimeout(time.Second*time.Duration(timeOut), patterns...)
 	}
 	if result == EventCtrlC {
 		return nil, ErrCtrlC
@@ -125,7 +125,7 @@ func (g *Global) expect(ctx context.Context, w *gmnlisp.World, node gmnlisp.Node
 	return gmnlisp.Integer(result), nil
 }
 
-func (g *Global) expectX(ctx context.Context, w *gmnlisp.World, node gmnlisp.Node) (gmnlisp.Node, error) {
+func (env *Env) expectX(ctx context.Context, w *gmnlisp.World, node gmnlisp.Node) (gmnlisp.Node, error) {
 
 	patterns := []string{}
 	actions := []gmnlisp.Node{}
@@ -169,9 +169,9 @@ func (g *Global) expectX(ctx context.Context, w *gmnlisp.World, node gmnlisp.Nod
 
 	var result int
 	if timeoutSec == 0 {
-		result = g.w.Expect(patterns...)
+		result = env.w.Expect(patterns...)
 	} else {
-		result = g.w.ExpectWithTimeout(time.Second*time.Duration(timeoutSec), patterns...)
+		result = env.w.ExpectWithTimeout(time.Second*time.Duration(timeoutSec), patterns...)
 	}
 
 	if result == EventCtrlC {
@@ -184,7 +184,7 @@ func (g *Global) expectX(ctx context.Context, w *gmnlisp.World, node gmnlisp.Nod
 	}
 }
 
-func (g *Global) getenv(ctx context.Context, w *gmnlisp.World, arg gmnlisp.Node) (gmnlisp.Node, error) {
+func (env *Env) getenv(ctx context.Context, w *gmnlisp.World, arg gmnlisp.Node) (gmnlisp.Node, error) {
 	name, err := gmnlisp.ExpectClass[gmnlisp.String](ctx, w, arg)
 	if err != nil {
 		return nil, err
@@ -196,7 +196,7 @@ func (g *Global) getenv(ctx context.Context, w *gmnlisp.World, arg gmnlisp.Node)
 	return gmnlisp.String(value), nil
 }
 
-func (g *Global) setenv(ctx context.Context, w *gmnlisp.World, __key, __val gmnlisp.Node) (gmnlisp.Node, error) {
+func (env *Env) setenv(ctx context.Context, w *gmnlisp.World, __key, __val gmnlisp.Node) (gmnlisp.Node, error) {
 	_key, err := gmnlisp.ExpectClass[gmnlisp.String](ctx, w, __key)
 	if err != nil {
 		return nil, err
@@ -215,7 +215,7 @@ func (g *Global) setenv(ctx context.Context, w *gmnlisp.World, __key, __val gmnl
 	return gmnlisp.Null, os.Setenv(key, val)
 }
 
-func (g *Global) wait(ctx context.Context, w *gmnlisp.World, pidNode gmnlisp.Node) (gmnlisp.Node, error) {
+func (env *Env) wait(ctx context.Context, w *gmnlisp.World, pidNode gmnlisp.Node) (gmnlisp.Node, error) {
 	pidInteger, err := gmnlisp.ExpectClass[gmnlisp.Integer](ctx, w, pidNode)
 	if err != nil {
 		return nil, err
