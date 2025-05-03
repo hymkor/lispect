@@ -7,6 +7,11 @@ import (
 	"github.com/hymkor/gmnlisp"
 )
 
+// RunFile loads and executes a Lisp script from the specified file.
+//   - fname: the path to the Lisp source file to be executed.
+//   - args: typically corresponds to os.Args[1:], where:
+//       - args[0] is the script file name (not used directly),
+//       - args[1:] are the arguments passed to the script.
 func RunFile(fname string, args []string) error {
 	script, err := os.ReadFile(fname)
 	if err != nil {
@@ -15,6 +20,11 @@ func RunFile(fname string, args []string) error {
 	return RunString(string(script), args)
 }
 
+// RunString executes a Lisp script provided as a string.
+//   - script: the Lisp code to be executed.
+//   - args: typically corresponds to os.Args[1:], where:
+//       - args[0] is a pseudo script name,
+//       - args[1:] are the arguments passed to the script.
 func RunString(script string, args []string) error {
 	term, err := NewTerm()
 	if err != nil {
