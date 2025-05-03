@@ -1,3 +1,5 @@
+- Refactor: renamed the structure type managing Pseudoconsole session, goroutine communication channels, and other related information from `Global` to `Env`.
+
 v0.5.0
 ======
 May 3, 2025
