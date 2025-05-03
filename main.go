@@ -1,17 +1,21 @@
-package main
+package lispect
 
 import (
 	"context"
-	"fmt"
 	"os"
-	"runtime"
 
 	"github.com/hymkor/gmnlisp"
 )
 
-var version string
+func RunFile(fname string, args []string) error {
+	script, err := os.ReadFile(fname)
+	if err != nil {
+		return err
+	}
+	return RunString(string(script), args)
+}
 
-func mains(args []string) error {
+func RunString(script string, args []string) error {
 	term, err := NewTerm()
 	if err != nil {
 		return err
@@ -41,19 +45,6 @@ func mains(args []string) error {
 			gmnlisp.NewSymbol("setenv"):  gmnlisp.Function2(g.setenv),
 			gmnlisp.NewSymbol("wait"):    gmnlisp.Function1(g.wait),
 		})
-
-	if len(args) <= 0 {
-		return fmt.Errorf("%s %s-%s-%s: script path required",
-			os.Args[0],
-			version,
-			runtime.GOOS,
-			runtime.GOARCH)
-	}
-	script, err := os.ReadFile(args[0])
-	if err != nil {
-		return err
-	}
-
 	posixArgv := []gmnlisp.Node{}
 	for _, s := range args[1:] {
 		posixArgv = append(posixArgv, gmnlisp.String(s))
@@ -69,14 +60,7 @@ func mains(args []string) error {
 	})
 
 	ctx, cancel := context.WithCancel(context.Background())
-	_, err = lisp.Interpret(ctx, string(script))
+	_, err = lisp.Interpret(ctx, script)
 	cancel()
 	return err
-}
-
-func main() {
-	if err := mains(os.Args[1:]); err != nil {
-		fmt.Fprintln(os.Stderr, err.Error())
-		os.Exit(1)
-	}
 }

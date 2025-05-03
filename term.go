@@ -1,4 +1,4 @@
-package main
+package lispect
 
 import (
 	"os"
