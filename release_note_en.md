@@ -1,4 +1,5 @@
 - Refactor: renamed the structure type managing Pseudoconsole session, goroutine communication channels, and other related information from `Global` to `Env`.
+- To prepare for future gmnlisp updates where symbol names will become case-insensitive in accordance with the ISLisp standard, global variables have been renamed to `*argv*`, `*program-name*`, `*executable-name*`, and `*match*`. The old names are deprecated but still available for now.
 
 v0.5.0
 ======
