@@ -20,7 +20,7 @@ func RunFile(fname string, args []string) error {
 	return RunString(string(script), args)
 }
 
-// New creates a new Env instance that embeds a gmnlisp.World and 
+// New creates a new Env instance that embeds a gmnlisp.World and
 // sets up a pseudoterminal session and related communication structures.
 // This allows users to customize and control the Lisp environment flexibly.
 func New() (*Env, error) {
@@ -67,17 +67,17 @@ func RunString(script string, args []string) error {
 	}
 	defer env.Close()
 
-	posixArgv := []gmnlisp.Node{}
-	for _, s := range args[1:] {
-		posixArgv = append(posixArgv, gmnlisp.String(s))
+	var posixArgv gmnlisp.Node = gmnlisp.Null
+	for i := len(args) - 1; i >= 1; i-- {
+		posixArgv = &gmnlisp.Cons{Car: gmnlisp.String(args[i]), Cdr: posixArgv}
 	}
 	executable := os.Args[0]
 	if value, err := os.Executable(); err == nil {
 		executable = value
 	}
 	lisp := env.Let(gmnlisp.Variables{
-		gmnlisp.NewSymbol("ARGV"):              gmnlisp.List(posixArgv...),
-		gmnlisp.NewSymbol("*argv*"):            gmnlisp.List(posixArgv...),
+		gmnlisp.NewSymbol("ARGV"):              posixArgv,
+		gmnlisp.NewSymbol("*argv*"):            posixArgv,
 		gmnlisp.NewSymbol("PROGRAM-NAME"):      gmnlisp.String(args[0]),
 		gmnlisp.NewSymbol("*program-name*"):    gmnlisp.String(args[0]),
 		gmnlisp.NewSymbol("EXECUTABLE-NAME"):   gmnlisp.String(executable),
