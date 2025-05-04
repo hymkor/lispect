@@ -21,18 +21,14 @@ func RunFile(fname string, args []string) error {
 	return RunString(string(script), args)
 }
 
-// RunString executes a Lisp script given directly as a string.
-//
-// - script: the Lisp source code to be executed (equivalent to the contents of a file).
-// - args: typically corresponds to os.Args[1:].
-// - args[0]: the script file name (not used directly).
-// - args[1:]: arguments passed to the script.
-func RunString(script string, args []string) error {
+// New creates a new Env instance that embeds a gmnlisp.World and 
+// sets up a pseudoterminal session and related communication structures.
+// This allows users to customize and control the Lisp environment flexibly.
+func New() (*Env, error) {
 	term, err := NewTerm()
 	if err != nil {
-		return err
+		return nil, err
 	}
-	defer term.Close()
 
 	watcher := NewWatcher(term)
 
@@ -40,13 +36,12 @@ func RunString(script string, args []string) error {
 		term: term,
 		w:    watcher,
 	}
-	defer env.Close()
 
 	gmnlisp.NewLineOnFormat = []byte{'\r', '\n'}
 
 	lisp := gmnlisp.New()
 
-	lisp = lisp.Flet(
+	env.World = lisp.Flet(
 		gmnlisp.Functions{
 			gmnlisp.NewSymbol("send"):    &gmnlisp.Function{Min: 1, F: env.send},
 			gmnlisp.NewSymbol("sendln"):  &gmnlisp.Function{Min: 1, F: env.sendln},
@@ -57,6 +52,23 @@ func RunString(script string, args []string) error {
 			gmnlisp.NewSymbol("setenv"):  gmnlisp.Function2(env.setenv),
 			gmnlisp.NewSymbol("wait"):    gmnlisp.Function1(env.wait),
 		})
+
+	return env, nil
+}
+
+// RunString executes a Lisp script given directly as a string.
+//
+// - script: the Lisp source code to be executed (equivalent to the contents of a file).
+// - args: typically corresponds to os.Args[1:].
+// - args[0]: the script file name (not used directly).
+// - args[1:]: arguments passed to the script.
+func RunString(script string, args []string) error {
+	env, err := New()
+	if err != nil {
+		return err
+	}
+	defer env.Close()
+
 	posixArgv := []gmnlisp.Node{}
 	for _, s := range args[1:] {
 		posixArgv = append(posixArgv, gmnlisp.String(s))
@@ -65,7 +77,7 @@ func RunString(script string, args []string) error {
 	if value, err := os.Executable(); err == nil {
 		executable = value
 	}
-	lisp = lisp.Let(gmnlisp.Variables{
+	lisp := env.Let(gmnlisp.Variables{
 		gmnlisp.NewSymbol("ARGV"):              gmnlisp.List(posixArgv...),
 		gmnlisp.NewSymbol("*argv*"):            gmnlisp.List(posixArgv...),
 		gmnlisp.NewSymbol("PROGRAM-NAME"):      gmnlisp.String(args[0]),

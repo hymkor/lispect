@@ -20,8 +20,9 @@ var (
 var ErrCtrlC = errors.New("^C")
 
 type Env struct {
-	w      *Watcher
-	term   *Term
+	w    *Watcher
+	term *Term
+	*gmnlisp.World
 	closer []func()
 }
 
@@ -30,6 +31,10 @@ func (env *Env) Close() {
 		env.closer[i]()
 	}
 	env.closer = nil
+	if env.term != nil {
+		env.term.Close()
+		env.term = nil
+	}
 }
 
 func (env *Env) send(ctx context.Context, w *gmnlisp.World, args []gmnlisp.Node) (gmnlisp.Node, error) {
