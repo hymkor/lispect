@@ -8,11 +8,10 @@ import (
 )
 
 // RunFile loads and executes a Lisp script from the specified file.
-//
-// - fname: the path to the Lisp source file to be executed.
-// - args: typically corresponds to os.Args[1:].
-// - args[0]: the script file name (not used directly).
-// - args[1:]: arguments passed to the script.
+// - `fname`: the path to the Lisp source file to be executed.
+// - `args`: a slice of arguments typically corresponding to os.Args[1:].
+// - `args[0]` is set to the Lisp variable `*program-name*`.
+// - `args[1:]` is set to the Lisp variable `*argv*`.
 func RunFile(fname string, args []string) error {
 	script, err := os.ReadFile(fname)
 	if err != nil {
@@ -57,11 +56,10 @@ func New() (*Env, error) {
 }
 
 // RunString executes a Lisp script given directly as a string.
-//
-// - script: the Lisp source code to be executed (equivalent to the contents of a file).
-// - args: typically corresponds to os.Args[1:].
-// - args[0]: the script file name (not used directly).
-// - args[1:]: arguments passed to the script.
+// - `script`: the Lisp source code to be executed (equivalent to the contents of a file).
+// - `args`: a slice of arguments typically corresponding to os.Args[1:].
+// - `args[0]` is set to the Lisp variable `*program-name*`.
+// - `args[1:]` is set to the Lisp variable `*argv*`.
 func RunString(script string, args []string) error {
 	env, err := New()
 	if err != nil {
