@@ -1,5 +1,8 @@
 - Refactor: renamed the structure type managing Pseudoconsole session, goroutine communication channels, and other related information from `Global` to `Env`.
-- To prepare for future gmnlisp updates where symbol names will become case-insensitive in accordance with the ISLisp standard, global variables have been renamed to `*argv*`, `*program-name*`, `*executable-name*`, and `*match*`. The old names are deprecated but still available for now.
+- Dependency: Bump gmnlisp to v0.7.10
+- In gmnlisp v0.7.10, symbol names have officially become case-insensitive in accordance with the ISLisp standard.  
+  To ensure consistent behavior, Lispect has adopted the canonical names `*argv*`, `*program-name*`, `*executable-name*`, and `*match*` for built-in global variables.  
+  The previous names remain available as aliases for backward compatibility but are now deprecated.
 
 v0.5.0
 ======
