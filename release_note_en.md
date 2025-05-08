@@ -1,3 +1,7 @@
+v0.6.0
+======
+May 8, 2025
+
 - Refactor: renamed the structure type managing Pseudoconsole session, goroutine communication channels, and other related information from `Global` to `Env`.
 - Dependency: Bump gmnlisp to [v0.7.10]
 - In [gmnlisp v0.7.10], symbol names have officially become case-insensitive in accordance with the ISLisp standard.  
