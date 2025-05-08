@@ -1,6 +1,8 @@
 - 疑似端末情報やゴルーチン通信用チャンネルなどの情報を管理する構造体名を `Global` から `Env` に改めた。
-- gmnlisp を v0.7.10 へ更新
-- gmnlisp v0.7.10 ではシンボル名は ISLisp の仕様に従って、英大文字・小文字の区別をしないよにした。一貫性を保証するため、グローバル変数は `*argv*`、`*program-name*`、`*executable-name*`、および `*match*` に改名した。以前の名前は非推奨だが、当面のあいだは引き続き使用可能とする。
+- gmnlisp を [v0.7.10] へ更新
+- [gmnlisp v0.7.10] ではシンボル名は ISLisp の仕様に従って、英大文字・小文字の区別をしないよにした。一貫性を保証するため、グローバル変数は `*argv*`、`*program-name*`、`*executable-name*`、および `*match*` に改名した。以前の名前は非推奨だが、当面のあいだは引き続き使用可能とする。
+
+[v0.7.10]: https://github.com/hymkor/gmnlisp/releases/tag/v0.7.10
 
 v0.5.0
 ======
