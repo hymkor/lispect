@@ -1,3 +1,7 @@
+- Dependency: Bump gmnlisp to [v0.7.14]
+
+[v0.7.14]: https://github.com/hymkor/gmnlisp/releases/tag/v0.7.14
+
 v0.6.0
 ======
 May 8, 2025
