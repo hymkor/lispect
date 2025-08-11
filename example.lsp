@@ -1,5 +1,5 @@
 (catch 'fail
-  (if (< (length ARGV) 2)
+  (if (< (length *argv*) 2)
     (progn
       (format (error-output) "Usage: ~A ~A USERNAME@DOMAIN PASSWORD~%" *executable-name* *program-name*)
       (throw 'fail nil)))
