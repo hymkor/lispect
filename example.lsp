@@ -1,18 +1,18 @@
 (block main
   (if (< (length *argv*) 2)
     (progn
-      (format (error-output) "Usage: ~A ~A USERNAME@DOMAIN PASSWORD~%" *executable-name* *program-name*)
+      (format (error-output) "Usage: ~A ~A {SSH-OPTIONS} USERNAME@DOMAIN PASSWORD~%" *executable-name* *program-name*)
       (return-from main nil)))
 
-  (let ((account (car *argv*))
-        (password (cadr *argv*))
-        (sshpid nil))
+  (let* ((ssh-param (subseq *argv* 0 (- (length *argv*) 1)))
+         (password (elt *argv* (- (length *argv*) 1)))
+         (sshpid nil))
 
     (with-handler
       (lambda (c)
         (format (error-output) "ssh is not found~%")
-      (setq sshpid (spawn "ssh" account)))
         (return-from main nil))
+      (setq sshpid (apply #'spawn "ssh" ssh-param)))
 
     (expect*
       ("[fingerprint])?"
