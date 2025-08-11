@@ -1,8 +1,8 @@
-(catch 'fail
+(block main
   (if (< (length *argv*) 2)
     (progn
       (format (error-output) "Usage: ~A ~A USERNAME@DOMAIN PASSWORD~%" *executable-name* *program-name*)
-      (throw 'fail nil)))
+      (return-from main nil)))
 
   (let ((account (car *argv*))
         (password (cadr *argv*))
@@ -11,8 +11,8 @@
     (with-handler
       (lambda (c)
         (format (error-output) "ssh is not found~%")
-        (throw 'fail nil))
       (setq sshpid (spawn "ssh" account)))
+        (return-from main nil))
 
     (expect*
       ("[fingerprint])?"
@@ -23,17 +23,17 @@
        (sendln password))
       (("Connection refused"
         "Could not resolve hostname")
-       (throw 'fail nil))
+       (return-from main nil))
       (30
        (format (error-output) "TIME OUT~%")
-       (throw 'fail nil)))
+       (return-from main nil)))
 
     (expect*
       ("Permission denied"
        (expect "password:")
        (send #\U3)
        (wait sshpid)
-       (throw 'fail nil)
+       (return-from main nil)
        )
       ("$ "))
     (sendln "echo YOU CAN CALL SOME COMMAND HERE")
