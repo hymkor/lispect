@@ -123,6 +123,16 @@ Parameters enclosed in curly braces {...} are optional and can be omitted.
   The matched string in an `(expect*)` block.
 - `(catch TAG-FORM FORM...)` and `(throw TAG-FORM RESULT-FORM)`
     - Non-local exits. See also [ISLISP draft - 14.7. Non-local exits](https://islisp-dev.github.io/ISLispHyperDraft/islisp-v23.html#non_local_exits)
+- `(block TAG FORM...)` and `(return-from TAG VALUE)`
+    - Defines a block with a tag TAG. `(return-from TAG VALUE)` exits from the block early, returning VALUE. Useful for controlling flow within a section of code without exiting the entire script.
+- `(apply FUNCTION ARG-LIST)`
+    - Calls FUNCTION with arguments supplied as a list ARG-LIST.  
+      Useful when the number of arguments is dynamic or collected in a list.  
+      Example:
+      ```lisp
+      (setq args (list "-p" "2222" "user@host"))
+      (apply #'spawn "ssh" args)  ; equivalent to (spawn "ssh" "-p" "2222" "user@host")
+      ```
 - `(with-handler HANDLER FORM...)`
     - When an error occurs in `FORMS...`, call `HANDLER`.
       See also [ISLISP Draft - Operations relating to condition handling](https://islisp-dev.github.io/ISLispHyperDraft/islisp-v23.html#s_with_handler)
