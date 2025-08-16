@@ -11,11 +11,13 @@ Lispect
 
 **example.lsp**
 
-$ `lispect example.lsp USERNAME@DOMAIN PASSWORD`  
+$ `lispect example.lsp {SSH-OPTIONS} USERNAME@DOMAIN PASSWORD`  
 → login `USERNAME@DOMAIN` with `ssh` and input `PASSWORD` automatically
 
 > [!NOTE]
 > Some variable names have been updated for compatibility with recent versions of gmnlisp, but the old names remain available for now.
+
+`lispect ./example.lsp -p 2222 username@127.0.0.1 yourpassword`
 
 ```example.lsp
 (block main
