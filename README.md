@@ -18,21 +18,21 @@ $ `lispect example.lsp USERNAME@DOMAIN PASSWORD`
 > Some variable names have been updated for compatibility with recent versions of gmnlisp, but the old names remain available for now.
 
 ```example.lsp
-(catch 'fail
-  (if (< (length ARGV) 2)
+(block main
+  (if (< (length *argv*) 2)
     (progn
-      (format (error-output) "Usage: ~A ~A USERNAME@DOMAIN PASSWORD~%" *executable-name* *program-name*)
-      (throw 'fail nil)))
+      (format (error-output) "Usage: ~A ~A {SSH-OPTIONS} USERNAME@DOMAIN PASSWORD~%" *executable-name* *program-name*)
+      (return-from main nil)))
 
-  (let ((account (car *argv*))
-        (password (cadr *argv*))
-        (sshpid nil))
+  (let* ((ssh-param (subseq *argv* 0 (- (length *argv*) 1)))
+         (password (elt *argv* (- (length *argv*) 1)))
+         (sshpid nil))
 
     (with-handler
       (lambda (c)
         (format (error-output) "ssh is not found~%")
-        (throw 'fail nil))
-      (setq sshpid (spawn "ssh" account)))
+        (return-from main nil))
+      (setq sshpid (apply #'spawn "ssh" ssh-param)))
 
     (expect*
       ("[fingerprint])?"
@@ -43,17 +43,17 @@ $ `lispect example.lsp USERNAME@DOMAIN PASSWORD`
        (sendln password))
       (("Connection refused"
         "Could not resolve hostname")
-       (throw 'fail nil))
+       (return-from main nil))
       (30
        (format (error-output) "TIME OUT~%")
-       (throw 'fail nil)))
+       (return-from main nil)))
 
     (expect*
       ("Permission denied"
        (expect "password:")
        (send #\U3)
        (wait sshpid)
-       (throw 'fail nil)
+       (return-from main nil)
        )
       ("$ "))
     (sendln "echo YOU CAN CALL SOME COMMAND HERE")
