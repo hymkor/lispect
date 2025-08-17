@@ -1,10 +1,12 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"runtime"
 
+	"github.com/hymkor/gmnlisp/exit"
 	"github.com/hymkor/lispect"
 )
 
@@ -22,6 +24,10 @@ func mains(args []string) error {
 }
 func main() {
 	if err := mains(os.Args[1:]); err != nil {
+		var exitError exit.ExitError
+		if errors.As(err, &exitError) {
+			os.Exit(exitError.Value)
+		}
 		fmt.Fprintln(os.Stderr, err.Error())
 		os.Exit(1)
 	}
