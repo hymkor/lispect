@@ -129,10 +129,6 @@ Parameters enclosed in curly braces {...} are optional and can be omitted.
   The path to the Lispect executable.
 - `*match*` (formerly `MATCH`, now deprecated)[^1]  
   The matched string in an `(expect*)` block.
-- `(catch TAG-FORM FORM...)` and `(throw TAG-FORM RESULT-FORM)`
-    - Non-local exits. See also [ISLISP draft - 14.7. Non-local exits](https://islisp-dev.github.io/ISLispHyperDraft/islisp-v23.html#non_local_exits)
-- `(block TAG FORM...)` and `(return-from TAG VALUE)`
-    - Defines a block with a tag TAG. `(return-from TAG VALUE)` exits from the block early, returning VALUE. Useful for controlling flow within a section of code without exiting the entire script.
 - `(apply FUNCTION ARG-LIST)`
     - Calls FUNCTION with arguments supplied as a list ARG-LIST.  
       Useful when the number of arguments is dynamic or collected in a list.  
