@@ -117,6 +117,10 @@ Parameters enclosed in curly braces {...} are optional and can be omitted.
     - Get the value of the environment variable NAME
 - `(setenv "NAME" "VALUE")`
     - Set the value of the environment variable NAME as VALUE
+- `(quit {N})`
+    - Terminates the Lispect process with exit code `N` when running Lispect as a command-line executable.
+    - `N` must be an integer between 0 and 255. If omitted, the exit code defaults to `0`.
+    - When Lispect is used as a library (for example, calling `lispect.RunFile` or `lispect.RunString`), the process is **not** terminated. Instead, these functions return an error of type `exit.ExitError` corresponding to the requested exit code.
 - `*argv*` (formerly `ARGV`, now deprecated)[^1]  
   The list of command-line arguments.
 - `*program-name*` (formerly `PROGRAM-NAME`, now deprecated)[^1]  
