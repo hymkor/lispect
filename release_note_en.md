@@ -1,3 +1,8 @@
+- Updated gmnlisp to [v0.7.23]
+- Integrated the `(quit)` function from the gmnlisp `exit` subpackage. As a result, calling `(quit)` no longer prints Lisp call history (stack-trace-like output); instead, lispect now exits cleanly with the specified exit code.
+
+[v0.7.23]: https://github.com/hymkor/gmnlisp/releases/tag/v0.7.23
+
 v0.6.2
 ======
 Jul 21, 2025

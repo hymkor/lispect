@@ -1,3 +1,8 @@
+- gmnlisp を [v0.7.23] に更新
+- gmnlisp のサブパッケージ `exit` による `(quit)` を組み込み。これにより、`(quit)` 実行時に Lisp の関数呼び出し履歴（スタックトレース風の出力）が表示されず、指定した終了コードで正常に終了するようにした
+
+[v0.7.23]: https://github.com/hymkor/gmnlisp/releases/tag/v0.7.23
+
 v0.6.2
 ======
 Jul 21, 2025
