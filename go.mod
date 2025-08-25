@@ -4,7 +4,7 @@ go 1.23.3
 
 require (
 	github.com/aymanbagabas/go-pty v0.2.2
-	github.com/hymkor/gmnlisp v0.7.23
+	github.com/hymkor/gmnlisp v0.7.24
 	github.com/hymkor/go-windows1x-virtualterminal v0.5.0
 	golang.org/x/term v0.34.0
 )
