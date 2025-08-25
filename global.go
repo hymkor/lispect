@@ -208,7 +208,7 @@ func (env *Env) setenv(ctx context.Context, w *gmnlisp.World, __key, __val gmnli
 	}
 	key := string(_key)
 
-	if gmnlisp.IsNull(__val) {
+	if gmnlisp.IsNone(__val) {
 		return gmnlisp.Null, os.Unsetenv(key)
 	}
 	_val, err := gmnlisp.ExpectClass[gmnlisp.String](ctx, w, __val)
